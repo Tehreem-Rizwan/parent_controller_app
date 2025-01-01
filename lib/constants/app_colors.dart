@@ -12,4 +12,5 @@ const kBeigeColor = Color(0xffF5F5DC);
 const kWhiteColor = Color(0xffFFFFFF);
 const kborderColor = Color(0xffE8E8E8);
 const kBlackColor = Color(0xff000000);
+const kRedColor = Color(0xffFF0000);
 const kDividerColor = Color(0xffe3e3e3);
