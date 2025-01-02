@@ -23,7 +23,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void splashScreenHandler() {
     Timer(
       Duration(seconds: 5),
-      () => Get.offAll(() => Home()),
+      () => Get.offAll(() => Home(
+            title: "Screen Time Controller",
+          )),
     );
   }
 
