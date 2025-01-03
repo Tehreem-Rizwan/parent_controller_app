@@ -57,6 +57,8 @@ class _HomeState extends State<Home> {
       }
     }
     _locationData = await location.getLocation();
+    print(
+        "DEVICE LOCATION LAT: ${_locationData!.latitude} : LONG ${_locationData!.longitude}");
   }
 
   @override
