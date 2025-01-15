@@ -68,9 +68,10 @@ class _AppUsageDetailsState extends State<AppUsageDetails> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: kTealColor,
+          iconTheme: IconThemeData(color: kSecondaryColor),
           title: CustomText(
             text: widget.application.name,
-            color: Colors.white,
+            color: kSecondaryColor,
             size: 20,
             weight: FontWeight.bold,
           ),
