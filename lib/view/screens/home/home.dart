@@ -1,3 +1,6 @@
+import 'dart:js_interop';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -155,9 +158,12 @@ class _HomeState extends State<Home> {
                           physics: ScrollPhysics(),
                           itemCount: apps.length,
                           itemBuilder: (context, index) {
-                            //     final app = apps[index];
+                            //   final app = apps[index];
                             return GestureDetector(
-                              onTap: () {
+                              onTap: () async {
+                                await FirebaseFirestore.instance
+                                    .collection("users_parental_controll")
+                                    .add({'appName': apps[index].appName});
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (context) {
                                   return AppUsageDetails(
