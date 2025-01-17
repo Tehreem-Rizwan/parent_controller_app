@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -163,7 +161,7 @@ class _HomeState extends State<Home> {
                               onTap: () async {
                                 await FirebaseFirestore.instance
                                     .collection("users_parental_controll")
-                                    .add({'appName': apps[index].appName});
+                                    .add({'appName': apps[index].name});
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (context) {
                                   return AppUsageDetails(

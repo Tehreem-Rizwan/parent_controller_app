@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:parental_control_app/constants/app_images.dart';
 import 'package:parental_control_app/constants/app_styling.dart';
 import 'package:parental_control_app/view/screens/home/home.dart';
+import 'package:parental_control_app/view/screens/signinOptions/signin_options.dart';
 import '../../../constants/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,9 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void splashScreenHandler() {
     Timer(
       Duration(seconds: 5),
-      () => Get.offAll(() => Home(
-            title: "Screen Time Controller",
-          )),
+      () => Get.offAll(() => signInOptions()
+          // Home(
+          //       title: "Screen Time Controller",
+          //     )
+          ),
     );
   }
 
