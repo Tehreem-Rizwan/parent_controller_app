@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -82,60 +83,75 @@ class _HomeState extends State<Home> {
               weight: FontWeight.bold,
             ),
           ),
+          leading: Container(),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+              },
+              icon: Icon(Icons.logout),
+              color: kSecondaryColor,
+            )
+          ],
         ),
         body: Container(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: FlutterMap(
-                    options: MapOptions(
-                      initialCenter: LatLng(
-                          _locationData!.latitude!, _locationData!.longitude!),
-                      minZoom: 5,
-                      maxZoom: 15,
-                    ),
-                    children: <Widget>[
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: FlutterMap(
+                      options: MapOptions(
+                        initialCenter: _locationData != null
+                            ? LatLng(_locationData!.latitude!,
+                                _locationData!.longitude!)
+                            : LatLng(0.0,
+                                0.0), // Fallback to a default location if null
+                        minZoom: 5,
+                        maxZoom: 15,
                       ),
-                      MarkerClusterLayerWidget(
-                        options: MarkerClusterLayerOptions(
-                          maxClusterRadius: 45,
-                          size: const Size(40, 40),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(50),
-                          maxZoom: 15,
-                          markers: [
-                            Marker(
-                                point: LatLng(_locationData!.latitude!,
-                                    _locationData!.longitude!),
-                                child: Container(
-                                    height: h(context, 80),
-                                    width: w(context, 80),
-                                    child: Icon(Icons.location_on,
-                                        color: Colors.deepPurple)))
-                          ],
-                          builder: (context, markers) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.blue),
-                              child: Center(
-                                child: Text(
-                                  markers.length.toString(),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            );
-                          },
+                      children: <Widget>[
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                         ),
-                      ),
-                    ],
-                  ),
-                ),
+                        MarkerClusterLayerWidget(
+                          options: MarkerClusterLayerOptions(
+                            maxClusterRadius: 45,
+                            size: const Size(40, 40),
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(50),
+                            maxZoom: 15,
+                            markers: [
+                              Marker(
+                                  point: _locationData != null
+                                      ? LatLng(_locationData!.latitude!,
+                                          _locationData!.longitude!)
+                                      : LatLng(0.0,
+                                          0.0), // Fallback to default if null
+                                  child: Container(
+                                      height: h(context, 80),
+                                      width: w(context, 80),
+                                      child: Icon(Icons.location_on,
+                                          color: Colors.deepPurple)))
+                            ],
+                            builder: (context, markers) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.blue),
+                                child: Center(
+                                  child: Text(
+                                    markers.length.toString(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )),
                 ConstrainedBox(
                   constraints: BoxConstraints(
                       minHeight: MediaQuery.of(context).size.height * 0.5),

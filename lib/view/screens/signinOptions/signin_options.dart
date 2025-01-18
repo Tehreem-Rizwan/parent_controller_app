@@ -20,60 +20,50 @@ class _signInOptionsState extends State<signInOptions> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              decoration: BoxDecoration(),
-              child: TextButton(
-                  style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25))),
-                  onPressed: () {
-                    Get.to(() => ParentSignIn());
-                  },
-                  child: Text(
-                    "Login as Parent",
-                    style: TextStyle(color: kSecondaryColor, fontSize: 18),
-                  )),
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(),
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25))),
+                    onPressed: () {
+                      Get.to(() => ParentSignIn(
+                            title: 'Parent',
+                            isParent: true,
+                          ));
+                    },
+                    child: Text(
+                      "Login as Parent",
+                      style: TextStyle(color: kSecondaryColor, fontSize: 18),
+                    )),
+              ),
             ),
             SizedBox(
               height: h(context, 40),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              decoration: BoxDecoration(),
-              child: TextButton(
-                  style: TextButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25))),
-                  onPressed: () {
-                    Get.to(() => ChildrenSignIn());
-                  },
-                  child: Text(
-                    "Sign in",
-                    style: TextStyle(color: kSecondaryColor, fontSize: 18),
-                  )),
-            ),
-            SizedBox(
-              height: h(context, 40),
-              child: Center(child: Text("OR")),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              decoration: BoxDecoration(),
-              child: TextButton(
-                  style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25))),
-                  onPressed: () {
-                    Get.to(() => ChildrenSignIn());
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(color: kBlackColor, fontSize: 18),
-                  )),
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(),
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.yellow,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25))),
+                    onPressed: () {
+                      Get.to(() => ParentSignIn(
+                            title: 'Child',
+                            isParent: false,
+                          ));
+                    },
+                    child: Text(
+                      "Login as Child",
+                      style: TextStyle(color: kSecondaryColor, fontSize: 18),
+                    )),
+              ),
             ),
           ],
         ),
