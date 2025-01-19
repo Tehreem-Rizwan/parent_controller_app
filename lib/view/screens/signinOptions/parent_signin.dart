@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:parental_control_app/constants/app_colors.dart';
 import 'package:parental_control_app/constants/app_styling.dart';
 import 'package:get/get.dart';
+import 'package:parental_control_app/model/children.dart';
 import 'package:parental_control_app/model/parent.dart';
 import 'package:parental_control_app/view/screens/home/home.dart';
 
@@ -28,6 +31,18 @@ class _ParentSignInState extends State<ParentSignIn> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  String generateRandomCode() {
+    final String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final int codeLength = 6;
+    final Random random = Random();
+    String code = '';
+    for (int i = 0; i < codeLength; i++) {
+      final int randomIndex = random.nextInt(alphabet.length);
+      code += alphabet[randomIndex];
+    }
+    return code;
   }
 
   @override
@@ -166,11 +181,22 @@ class _ParentSignInState extends State<ParentSignIn> {
                             _emailController.text = '';
                             _passwordController.text = '';
                           });
-                          Parent parent = Parent(
-                              credential.user!.uid, "", "", "", [], "", "");
-                          await FirebaseFirestore.instance
-                              .collection('parents')
-                              .add(parent.toJSON());
+                          if (widget.isParent) {
+                            Parent parent = Parent(credential.user!.uid, "", "",
+                                "", [], generateRandomCode(), "");
+                            await FirebaseFirestore.instance
+                                .collection('parents')
+                                .doc(credential.user!.uid.isNotEmpty
+                                    ? credential.user!.uid
+                                    : null)
+                                .set(parent.toJSON());
+                          } else {
+                            Children children = Children(credential.user!.uid,
+                                '', '', '', '', '', '', []);
+                            await FirebaseFirestore.instance
+                                .collection('children')
+                                .add(children.toJSON());
+                          }
                         } else {
                           setState(() {
                             issignUp = !issignUp;

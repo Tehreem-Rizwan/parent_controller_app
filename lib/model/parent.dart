@@ -17,7 +17,8 @@ class Parent {
       "age": age,
       "devicetoken": deviceToken,
       "latitude": latitude,
-      "longitude": longitude
+      "longitude": longitude,
+      "appInformations": appInformation
     };
   }
 }
