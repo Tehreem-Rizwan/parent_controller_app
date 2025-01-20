@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parental_control_app/constants/app_colors.dart';
 import 'package:parental_control_app/constants/app_styling.dart';
-import 'package:parental_control_app/view/screens/signinOptions/children_signin.dart';
 import 'package:parental_control_app/view/screens/signinOptions/parent_signin.dart';
 
 class signInOptions extends StatefulWidget {

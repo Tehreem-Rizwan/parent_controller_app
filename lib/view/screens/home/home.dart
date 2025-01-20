@@ -17,8 +17,9 @@ import 'package:usage_stats/usage_stats.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key, required this.title});
+  const Home({super.key, required this.title, required this.isParent});
   final String title;
+  final bool isParent;
   @override
   State<Home> createState() => _HomeState();
 }
@@ -32,20 +33,23 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    getCurrentUser();
     getLocationDetails();
     getAllInstalledApps();
   }
 
+  getCurrentUser() async {
+    var user = await FirebaseAuth.instance.currentUser;
+    print("UID OF THE PARENT ${user!.uid}");
+  }
+
   getAllInstalledApps() async {
-    // Grant usage permission
-    await UsageStats.grantUsagePermission();
-
-    // Check if permission is granted
-    bool isPermission = await UsageStats.checkUsagePermission() as bool;
-
     List<AppInfo> apps = await InstalledApps.getInstalledApps();
 
     print("LENGTH OF APPS: ${apps.length}");
+    if (apps.isNotEmpty) {
+      apps.forEach((element) {});
+    }
   }
 
   getLocationDetails() async {

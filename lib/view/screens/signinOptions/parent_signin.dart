@@ -136,7 +136,9 @@ class _ParentSignInState extends State<ParentSignIn> {
 
                         if (credential.user != null) {
                           print('USER CREDENTIAL');
-                          Get.to(() => Home(title: "Screen Time Controller"));
+                          Get.to(() => Home(
+                              title: "Screen Time Controller",
+                              isParent: widget.isParent));
                         } else {
                           setState(() {
                             issignUp = !issignUp;
@@ -175,20 +177,18 @@ class _ParentSignInState extends State<ParentSignIn> {
                             .createUserWithEmailAndPassword(
                                 email: _emailController.text,
                                 password: _passwordController.text);
-                        print(credential.user);
                         if (credential.user != null) {
                           setState(() {
-                            _emailController.text = '';
-                            _passwordController.text = '';
+                            _emailController.clear();
+                            _passwordController.clear();
+                            issignUp = false; // Reset sign-up error
                           });
                           if (widget.isParent) {
                             Parent parent = Parent(credential.user!.uid, "", "",
                                 "", [], generateRandomCode(), "");
                             await FirebaseFirestore.instance
                                 .collection('parents')
-                                .doc(credential.user!.uid.isNotEmpty
-                                    ? credential.user!.uid
-                                    : null)
+                                .doc(credential.user!.uid)
                                 .set(parent.toJSON());
                           } else {
                             Children children = Children(credential.user!.uid,
@@ -197,19 +197,18 @@ class _ParentSignInState extends State<ParentSignIn> {
                                 .collection('children')
                                 .add(children.toJSON());
                           }
-                        } else {
-                          setState(() {
-                            issignUp = !issignUp;
-                          });
+                          Get.to(() => Home(
+                                title: "Screen Time Controller",
+                                isParent: widget.isParent,
+                              )); // Navigate to Home
                         }
                       }
                     } catch (e) {
                       print(e);
                       setState(() {
-                        issignUp = !issignUp;
+                        issignUp = true;
                       });
                     }
-                    //   Get.to(() => ChildrenSignIn());
                   },
                   child: Text(
                     "Sign Up",
