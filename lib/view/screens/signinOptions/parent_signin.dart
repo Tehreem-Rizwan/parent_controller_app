@@ -185,7 +185,7 @@ class _ParentSignInState extends State<ParentSignIn> {
                           });
                           if (widget.isParent) {
                             Parent parent = Parent(credential.user!.uid, "", "",
-                                "", [], generateRandomCode(), "");
+                                "", [], generateRandomCode(), "", '');
                             await FirebaseFirestore.instance
                                 .collection('parents')
                                 .doc(credential.user!.uid)

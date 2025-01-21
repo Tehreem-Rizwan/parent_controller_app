@@ -11,10 +11,12 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:parental_control_app/constants/app_colors.dart';
 import 'package:parental_control_app/constants/app_styling.dart';
+import 'package:parental_control_app/model/app_information.dart';
+import 'package:parental_control_app/model/parent.dart';
 import 'package:parental_control_app/view/screens/Details/app_usage_details.dart'; // Updated import
 import 'package:parental_control_app/view/widget/Custom_text_widget.dart';
-import 'package:usage_stats/usage_stats.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:usage_stats/usage_stats.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, required this.title, required this.isParent});
@@ -30,9 +32,16 @@ class _HomeState extends State<Home> {
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
   LocationData? _locationData;
+  bool isSearchClicked = false;
+  String? userId;
+  UsageInfo? appUsageInfo;
+  List<AppInformation> appInformations = [];
+  String? docId;
+  Parent? parent;
   @override
   void initState() {
     super.initState();
+    parent = Parent('', '', '', '', [], '', '', '');
     getCurrentUser();
     getLocationDetails();
     getAllInstalledApps();
@@ -41,15 +50,32 @@ class _HomeState extends State<Home> {
   getCurrentUser() async {
     var user = await FirebaseAuth.instance.currentUser;
     print("UID OF THE PARENT ${user!.uid}");
+    setState(() {
+      parent!.userID = user.uid;
+      docId = user.uid;
+    });
   }
 
   getAllInstalledApps() async {
+    appInformations = [];
     List<AppInfo> apps = await InstalledApps.getInstalledApps();
 
     print("LENGTH OF APPS: ${apps.length}");
     if (apps.isNotEmpty) {
-      apps.forEach((element) {});
+      for (var element in apps) {
+        AppInformation appInfo =
+            AppInformation(element.name, element.packageName, "", "");
+        setState(() {
+          appInformations.add(appInfo);
+        });
+      }
     }
+    setState(() {
+      parent!.appInformations = appInformations;
+    });
+    print("LENGTH OF THE APP INFORMATION ${appInformations.length}");
+    print("DOCID OF THE PARENT $docId");
+    await updateParentInformation(docId!);
   }
 
   getLocationDetails() async {
@@ -68,9 +94,39 @@ class _HomeState extends State<Home> {
         return;
       }
     }
-    _locationData = await location.getLocation();
+    await location.getLocation().then((value) {
+      setState(() {
+        _locationData = value;
+        parent!.latitude = value.latitude.toString();
+        parent!.longitude = value.longitude.toString();
+      });
+    });
+    //_locationData = await location.getLocation();
     print(
         "DEVICE LOCATION LAT: ${_locationData!.latitude} : LONG ${_locationData!.longitude}");
+  }
+
+  updateParentInformation(String docID) async {
+    await FirebaseFirestore.instance.collection("parents").doc(docID).update({
+      "latitude": _locationData!.latitude,
+      "longitude": _locationData!.longitude,
+      "appInformations": appInformations.map((e) => e.toJSON()).toList(),
+    }
+        // {"appInformations": appInformations.map((e) => e.toJSON()).toList()}
+        );
+  }
+
+  Future<String> checkParentCode(String parentCode) async {
+    return await FirebaseFirestore.instance
+        .collection("parents")
+        .where('parentCode', isEqualTo: parentCode)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        return parentCode;
+      }
+      return parentCode;
+    });
   }
 
   @override

@@ -8,7 +8,7 @@ class Children {
   String deviceToken;
   String latitude;
   String longitude;
-  List<appInformation> appInformations;
+  List<AppInformation> appInformations;
   Children(
     this.userID,
     this.name,
