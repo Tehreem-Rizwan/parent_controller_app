@@ -10,8 +10,8 @@ class Parent {
   String longitude;
   List<AppInformation> appInformations;
   String parentCode;
-  Parent(this.age, this.deviceToken, this.name, this.userID,
-      this.appInformations, this.latitude, this.longitude, this.parentCode);
+  Parent(this.userID, this.name, this.age, this.deviceToken, this.latitude,
+      this.longitude, this.appInformations, this.parentCode);
   Map<String, dynamic> toJSON() {
     return {
       "userId": userID,
@@ -27,10 +27,10 @@ class Parent {
 
   factory Parent.fromMap(QueryDocumentSnapshot<Map<String, dynamic>> data) {
     return Parent(
+      data['userId'],
+      data['name'],
       data['age'],
       data['devicetoken'],
-      data['name'],
-      data['userId'],
       data['latitude'],
       data['longitude'],
       data['appInformations'],

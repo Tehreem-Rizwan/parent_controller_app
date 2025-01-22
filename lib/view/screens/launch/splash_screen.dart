@@ -49,7 +49,7 @@ class SplashScreen extends StatelessWidget {
                 );
               } else {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Get.offAll(() => signInOptions());
+                  Get.offAll(() => SignInOptions());
                 });
               }
               return Image(

@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    parent = Parent('', '', '', '', [], '', '', '');
+    parent = Parent('', '', '', '', '', '', [], '');
     getCurrentUser();
     getLocationDetails();
     getAllInstalledApps();
@@ -114,19 +114,6 @@ class _HomeState extends State<Home> {
     }
         // {"appInformations": appInformations.map((e) => e.toJSON()).toList()}
         );
-  }
-
-  Future<String> checkParentCode(String parentCode) async {
-    return await FirebaseFirestore.instance
-        .collection("parents")
-        .where('parentCode', isEqualTo: parentCode)
-        .get()
-        .then((value) {
-      if (value.docs.isNotEmpty) {
-        return parentCode;
-      }
-      return parentCode;
-    });
   }
 
   @override
